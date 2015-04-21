@@ -107,7 +107,7 @@ public class RouterService extends BaseService {
 	 * @param wxMpService
 	 * @param jsonData
 	 *            图片类Image的json
-	 * @return 返回修改记录数,新增时返回新增的id
+	 * @return 返回修改记录数
 	 */
 	public int fileUploadImage(WxMpService wxMpService, String jsonData) {
 

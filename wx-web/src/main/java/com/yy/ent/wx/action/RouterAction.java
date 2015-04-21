@@ -46,7 +46,7 @@ public class RouterAction extends BaseAction {
 	private WxMpInMemoryConfigStorage wxMpConfigStorage;
 	private WxMpService wxMpService;
 	private WxMpMessageRouter wxMpMessageRouter;
-	private boolean setRouter = false;
+	private boolean setRouter = false; 
 
 	@Inject(instance = Image.class)
 	private Image image;
@@ -59,7 +59,7 @@ public class RouterAction extends BaseAction {
 		wxMpConfigStorage.setToken("vzhanqun1234567890"); // 设置微信公众号的token
 		wxMpService = new WxMpServiceImpl();
 		wxMpService.setWxMpConfigStorage(wxMpConfigStorage);
-		//wxMpMessageRouter = new WxMpMessageRouter(wxMpService);
+
 	}
 
 	/**
@@ -102,10 +102,7 @@ public class RouterAction extends BaseAction {
 		return getForward("uploadImage.jsp");
 	}
 
-	public Return getImageList2() throws Exception {
-		getRequest().setAttribute("imageList", routerService.getMediaList(2));
-		return getForward("uploadImage-yingjie.jsp");
-	}
+
 	
 	/**
 	 * 获取路由文件列表接口
@@ -173,6 +170,12 @@ public class RouterAction extends BaseAction {
 		return getRenderFail("参数错误");
 	}
 
+	/**
+	 * 删除图片
+	 * @param jsonData
+	 * @return
+	 * @throws Exception
+	 */
 	public Render deleteImage(@Read(key = "data") String jsonData)
 			throws Exception {
 
@@ -183,6 +186,12 @@ public class RouterAction extends BaseAction {
 		return getRenderFail("参数错误");
 	}
 	
+	/**
+	 * 删除文本
+	 * @param jsonData
+	 * @return
+	 * @throws Exception
+	 */
 	public Render deleteText(@Read(key = "data") String jsonData)
 			throws Exception {
 
@@ -192,8 +201,9 @@ public class RouterAction extends BaseAction {
 		}
 		return getRenderFail("参数错误");
 	}
+	
 	/**
-	 * 上传图片
+	 * 上传图片到本服务器
 	 * 
 	 * @return
 	 * @throws Exception
@@ -209,7 +219,7 @@ public class RouterAction extends BaseAction {
 	}
 
 	/**
-	 * 保存图片
+	 * 从本服务器上传图片到微信服务器
 	 * 
 	 * @param jsonData
 	 * @return
@@ -243,10 +253,10 @@ public class RouterAction extends BaseAction {
 	}
 
 	/**
-	 * 
-	 * @param signature
-	 * @param nonce
-	 * @param timestamp
+	 * 微信api请求入口
+	 * @param signature  微信参数
+	 * @param nonce  微信参数
+	 * @param timestamp  微信参数
 	 * @return
 	 * @throws Exception
 	 */
@@ -271,9 +281,6 @@ public class RouterAction extends BaseAction {
 		String encryptType = StringUtils.isBlank(getRequest().getParameter(
 				"encrypt_type")) ? "raw" : getRequest().getParameter(
 				"encrypt_type");
-
-
-		
 		
 		if ("raw".equals(encryptType)) {
 			System.out.println("明文传输");
@@ -298,6 +305,11 @@ public class RouterAction extends BaseAction {
 		return getRender("success");
 	}
 
+	/**
+	 * 设置菜单
+	 * @return
+	 * @throws WxErrorException
+	 */
 	public Render setMenu() throws WxErrorException {
 
 		routerService.setMenu(wxMpService);
@@ -305,18 +317,34 @@ public class RouterAction extends BaseAction {
 
 	}
 
+	/**
+	 * 查询当前设置的菜单
+	 * @return
+	 * @throws WxErrorException
+	 */
 	public Render queryMenu() throws WxErrorException {
 		routerService.queryMenu(wxMpService);
 		return getRender("success");
 	}
 
+	/**
+	 * 删除微信菜单
+	 * @return
+	 * @throws WxErrorException
+	 */
 	public Render deleteMenu() throws WxErrorException {
 		routerService.deleteMenu(wxMpService);
 		return getRender("success");
 	}
 
+	/**
+	 * 获取1931资源
+	 * @return
+	 * @throws Exception
+	 */
 	public Render getWx1931() throws Exception {
 
+		//为1表示自拍萌照
 		List<Wx1931> list = routerService.getWx1931(1);
 		List<Property> proList = new ArrayList<Property>();
 		for (Wx1931 wx : list) {
@@ -388,6 +416,5 @@ public class RouterAction extends BaseAction {
 	public void reSetRouter(){
 		setRouter = false;
 	}
-	
 
 }
