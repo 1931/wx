@@ -68,5 +68,4 @@ public class DemoAction extends BaseAction {
         return getRender(signUp);
     }
 
-
 }
